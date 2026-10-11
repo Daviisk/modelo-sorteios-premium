@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --accent: #7c3aed;
+  --accent2: #a855f7;
+  --bg: #f7f7fb;
+  --card: #ffffff;
+  --border: #e5e7eb;
+  --muted: #6b7280;
+}
+
+body {
+  background: var(--bg);
+  color: #1a1a2e;
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.num-cell {
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  transition: 0.15s;
+}
+.num-cell.available {
+  background: var(--card);
+  cursor: pointer;
+}
+.num-cell.available:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.num-cell.selected {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  border-color: transparent;
+  transform: scale(1.05);
+}
+.num-cell.reserved {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fcd34d;
+  cursor: not-allowed;
+}
+.num-cell.sold {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fca5a5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+}
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Sistema visual original — marca neutra */
+:root { --accent:#6d28d9; --accent2:#8b5cf6; --bg:#f8f7fc; --border:#e9e3f2; }
+body { color:#21162e; -webkit-font-smoothing:antialiased; }
+.raffle-experience .raffle-panel { border-radius:20px; border-color:var(--border); box-shadow:0 5px 24px rgba(50,25,85,.045); }
+.raffle-experience h1,.raffle-experience h2,.raffle-experience h3 { letter-spacing:-.025em; }
+.raffle-experience .num-cell { min-height:48px; border-radius:12px; font-variant-numeric:tabular-nums; font-size:.9rem; }
+.raffle-experience .num-cell:focus-visible,.raffle-experience button:focus-visible,.checkout-input:focus-visible { outline:3px solid #a78bfa; outline-offset:2px; }
+.raffle-experience .num-cell.available:active { transform:scale(.96); }
+.raffle-experience .btn-primary { display:inline-flex; justify-content:center; align-items:center; gap:8px; min-height:48px; border-radius:14px; background:#6d28d9; box-shadow:0 5px 14px rgba(109,40,217,.16); transition:background .18s ease,transform .18s ease; }
+.raffle-experience .btn-primary:hover:not(:disabled) { background:#5b21b6; }
+.raffle-experience .btn-primary:active:not(:disabled) { transform:scale(.99); }
+.checkout-input { display:block; width:100%; min-height:48px; padding:12px 14px; border:1px solid #d9d2e4; border-radius:12px; background:#fff; font-size:16px; font-weight:400; color:#21162e; }
+.checkout-input::placeholder { color:#9ca3af; }
+.selection-bottom-bar { z-index:40; padding-bottom:env(safe-area-inset-bottom); }
+@media (prefers-reduced-motion:reduce) { .raffle-experience *, .raffle-experience *::before,.raffle-experience *::after { animation-duration:.01ms!important; transition-duration:.01ms!important; scroll-behavior:auto!important; } }
