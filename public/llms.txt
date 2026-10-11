@@ -1,0 +1,17 @@
+# Sorteios Premium
+
+> Site público de sorteios Sorteios Premium. Consulte as páginas atuais para obter o prêmio, preço por número, data e condições de cada sorteio.
+
+## Páginas públicas
+- [Sorteios disponíveis](https://modelo-sorteios-premium-two.vercel.app/): lista atual de sorteios ativos.
+- [Como participar e regulamento](https://modelo-sorteios-premium-two.vercel.app/como-participar): escolha de números, pagamento via PIX e regulamento de participação.
+- [Regulamento](https://modelo-sorteios-premium-two.vercel.app/como-participar#regulamento): regras comuns de participação.
+- [Sitemap](https://modelo-sorteios-premium-two.vercel.app/sitemap.xml): URLs públicas atualizadas.
+- [Privacidade](https://modelo-sorteios-premium-two.vercel.app/privacidade): tratamento de dados pessoais.
+- [Cookies](https://modelo-sorteios-premium-two.vercel.app/cookies): preferências de cookies opcionais.
+- [Termos](https://modelo-sorteios-premium-two.vercel.app/termos): condições de uso.
+
+## Orientações sobre o conteúdo
+As páginas de cada sorteio são a fonte para preços, imagens, prêmios e datas. Gerar um PIX não confirma o pagamento. A participação depende da confirmação do pagamento. A retirada ou frete do prêmio ficará sob responsabilidade do ganhador da rifa.
+Não inferir disponibilidade de números a partir de cópias antigas. Não consultar nem divulgar pedidos, participantes ou áreas administrativas.
+

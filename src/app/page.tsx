@@ -1,5 +1,53 @@
-import RaffleExperience from "@/components/RaffleExperience";
-export default function Home(){
-const image='<svg xmlns="http://www.w3.org/2000/svg" width="900" height="700"><rect width="900" height="700" fill="#f5f1fa"/><circle cx="450" cy="310" r="140" fill="#e9ddf6"/><text x="450" y="320" font-size="130" text-anchor="middle">🎁</text><text x="450" y="520" font-family="Arial" font-size="34" fill="#6d28d9" text-anchor="middle">Imagem do prêmio</text><text x="450" y="560" font-family="Arial" font-size="23" fill="#6d28d9" text-anchor="middle">Personalizável</text></svg>';
-return <main><nav className="max-w-3xl mx-auto px-4 pt-4 text-sm"><span className="underline">Sorteios Premium</span><span> / Sorteio demonstrativo</span></nav><RaffleExperience raffle={{slug:"sorteio-demonstrativo",title:"Sorteio Especial — Modelo Personalizável",prize:"Kit Premium Personalizado",prizeValue:1500,numberPrice:10,totalNumbers:100,drawDate:"2026-11-14T18:00:00-03:00",soldCount:8,rules:"Demonstração comercial. Personalize prêmio, imagens e informações.",imageUrl:"data:image/svg+xml,"+encodeURIComponent(image)}} initialNumbers={Array.from({length:100},(_,number)=>({number,status:(number%13===0?"SOLD":number%17===0?"RESERVED":"AVAILABLE") as "SOLD"|"RESERVED"|"AVAILABLE"}))}/><footer className="max-w-3xl mx-auto px-4 pb-10 text-xs text-gray-500">Modelo demonstrativo, sem pagamentos reais.</footer></main>;
+import { jsonLd, pageMetadata, SITE_DESCRIPTION } from "@/lib/seo";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { getRaffleNumberPrice } from "@/lib/rafflePricing";
+import Link from "next/link";
+import { prisma } from "@/lib/prisma";
+
+export const metadata = pageMetadata(`${SITE_NAME} — Sorteios de prêmios`, SITE_DESCRIPTION, "/");
+
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  if (!process.env.DATABASE_URL) return <main className="max-w-3xl mx-auto px-4 py-16 text-center"><h1 className="text-3xl font-bold">{SITE_NAME}</h1><p className="text-gray-500 mt-4">A plataforma está sendo preparada. Em breve, os sorteios estarão disponíveis aqui.</p></main>;
+  const activeRaffles = await prisma.raffle.findMany({
+    where: { status: "ATIVA" },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const structured = { "@context": "https://schema.org", "@graph": [
+    { "@type": "WebSite", "@id": `${SITE_URL}/#website`, url: SITE_URL, name: SITE_NAME, inLanguage: "pt-BR", description: SITE_DESCRIPTION },
+    { "@type": "CollectionPage", "@id": `${SITE_URL}/#page`, url: SITE_URL, name: "Sorteios de prêmios", isPartOf: { "@id": `${SITE_URL}/#website` }, mainEntity: { "@type": "ItemList", itemListElement: activeRaffles.map((raffle,index)=>({ "@type":"ListItem", position:index+1, name:raffle.title, url: `${SITE_URL}/rifa/${encodeURIComponent(raffle.slug)}` })) } },
+  ] };
+  return (
+    <main className="max-w-3xl mx-auto px-4 py-16 text-center">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html:jsonLd(structured)}} />
+      <h1 className="text-3xl font-bold">{SITE_NAME}</h1>
+      <p className="text-gray-500 mt-2">
+        Sorteios de prêmios com pagamento via PIX e resultado baseado na Loteria Federal. Consulte os prêmios, a data e o regulamento de cada sorteio.
+      </p>
+      {activeRaffles.length > 0 ? (
+        <div className="grid gap-4 sm:grid-cols-2 mt-6 text-left">
+          {activeRaffles.map((raffle) => (
+            <article key={raffle.id} className="card p-5 flex flex-col gap-3">
+              <h2 className="text-lg font-bold">{raffle.title}</h2>
+              <p className="text-sm text-gray-500">Prêmio: {raffle.prize}</p>
+              <p className="text-sm">
+                Número por <span className="text-2xl sm:text-3xl font-bold">{getRaffleNumberPrice(raffle.numberPrice).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</span>
+              </p>
+              <Link href={`/rifa/${encodeURIComponent(raffle.slug)}`} className="btn-primary text-center mt-auto" aria-label={`Participar da rifa ${raffle.title}`}>
+                Ver sorteio e escolher números
+              </Link>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p className="mt-6 text-sm text-gray-400">Nenhuma rifa ativa no momento.</p>
+      )}
+      <div className="mt-10 text-xs text-gray-400">
+        <Link href="/admin/login">Acesso administrativo</Link>
+      </div>
+    </main>
+  );
 }
+

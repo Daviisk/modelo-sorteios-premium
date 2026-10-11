@@ -1,0 +1,194 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  ADMIN
+}
+
+enum RaffleStatus {
+  RASCUNHO
+  ATIVA
+  PAUSADA
+  ENCERRADA
+  SORTEADA
+}
+
+enum NumberStatus {
+  AVAILABLE
+  RESERVED
+  SOLD
+}
+
+enum OrderStatus {
+  PENDING
+  RESERVED
+  PAID
+  CANCELLED
+  EXPIRED
+}
+
+enum PaymentStatus {
+  PENDING
+  APPROVED
+  FAILED
+  EXPIRED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      UserRole @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  draws     Draw[]
+}
+
+model Raffle {
+  id           String       @id @default(cuid())
+  title        String
+  slug         String       @unique
+  description  String
+  prize        String
+  prizeValue   Decimal      @db.Decimal(12, 2)
+  numberPrice  Decimal      @db.Decimal(12, 2)
+  totalNumbers Int          @default(100)
+  drawDate     DateTime
+  gallery       Json @default("[]")
+  imageUrl     String?
+  bannerUrl    String?
+  rules        String?
+  primaryColor String?      @default("#7c3aed")
+  status       RaffleStatus @default(RASCUNHO)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  numbers      RaffleNumber[]
+  orders       Order[]
+  draw         Draw?
+
+  @@index([slug])
+  @@index([status])
+}
+
+model RaffleNumber {
+  id                   String       @id @default(cuid())
+  raffleId             String
+  raffle               Raffle       @relation(fields: [raffleId], references: [id], onDelete: Cascade)
+  number               Int
+  status               NumberStatus @default(AVAILABLE)
+  reservationExpiresAt DateTime?
+  participantId        String?
+  participant          Participant? @relation(fields: [participantId], references: [id])
+  orderId              String?
+  order                Order?       @relation(fields: [orderId], references: [id])
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+
+  @@unique([raffleId, number])
+  @@index([raffleId, status])
+}
+
+model Participant {
+  id        String   @id @default(cuid())
+  name      String
+  cpf       String
+  phone     String
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  orders  Order[]
+  numbers RaffleNumber[]
+
+  @@index([cpf])
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  raffleId      String
+  raffle        Raffle      @relation(fields: [raffleId], references: [id])
+  participantId String
+  participant   Participant @relation(fields: [participantId], references: [id])
+  total         Decimal     @db.Decimal(12, 2)
+  status        OrderStatus @default(PENDING)
+  expiresAt     DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  items   OrderItem[]
+  numbers RaffleNumber[]
+  payment Payment?
+
+  @@index([status])
+  @@index([participantId])
+}
+
+model OrderItem {
+  id             String @id @default(cuid())
+  orderId        String
+  order          Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  raffleNumberId String
+  price          Decimal @db.Decimal(12, 2)
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  orderId       String        @unique
+  order         Order         @relation(fields: [orderId], references: [id])
+  provider      String
+  transactionId String?       @unique
+  amount        Decimal       @db.Decimal(12, 2)
+  status        PaymentStatus @default(PENDING)
+  qrCode        String?
+  pixCopyPaste  String?
+  expiresAt     DateTime?
+  paidAt        DateTime?
+  createdAt     DateTime      @default(now())
+
+  webhookEvents WebhookEvent[]
+}
+
+// Guarda IDs de eventos de webhook já processados, para garantir idempotência
+model WebhookEvent {
+  id            String   @id @default(cuid())
+  paymentId     String
+  payment       Payment  @relation(fields: [paymentId], references: [id])
+  externalId    String   @unique
+  payload       Json
+  processedAt   DateTime @default(now())
+}
+
+model Draw {
+  id            String   @id @default(cuid())
+  raffleId      String   @unique
+  raffle        Raffle   @relation(fields: [raffleId], references: [id])
+  winningNumber Int
+  method        String
+  seed          String
+  drawnAt       DateTime @default(now())
+  drawnById     String
+  drawnBy       User     @relation(fields: [drawnById], references: [id])
+}
+
+model Settings {
+  id            String  @id @default("singleton")
+  platformName  String  @default("RifaFácil")
+  logoUrl       String?
+  faviconUrl    String?
+  whatsapp      String?
+  email         String?
+  pixKey        String?
+  gateway       String  @default("mock")
+  primaryColor  String  @default("#7c3aed")
+  termsUrl      String?
+  privacyUrl    String?
+}
+

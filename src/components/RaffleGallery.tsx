@@ -20,3 +20,4 @@ export default function RaffleGallery({ imageUrl, gallery, prize }: { imageUrl?:
     </div>}
   </div>;
 }
+

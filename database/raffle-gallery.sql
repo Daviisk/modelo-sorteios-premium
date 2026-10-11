@@ -1,0 +1,2 @@
+ALTER TABLE public."Raffle" ADD COLUMN IF NOT EXISTS gallery JSONB NOT NULL DEFAULT '[]'::jsonb;
+

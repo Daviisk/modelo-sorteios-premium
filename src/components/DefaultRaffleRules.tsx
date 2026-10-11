@@ -1,6 +1,6 @@
 export default function DefaultRaffleRules() {
   return <div className="space-y-4">
-    <h3 className="font-bold">REGULAMENTO DEMONSTRATIVO</h3>
+    <h3 className="font-bold">REGULAMENTO DA RIFA</h3>
     <section><h4 className="font-bold">1. Participação</h4><p>Cada participante poderá adquirir <strong>quantos números quiser</strong>, desde que estejam disponíveis no momento da compra.</p></section>
     <section><h4 className="font-bold">2. Números disponíveis</h4><p>Os números da rifa serão de <strong>00 a 99</strong>, totalizando 100 números.</p></section>
     <section><h4 className="font-bold">3. Sorteio</h4><p>O sorteio será realizado com base no resultado da <strong>Loteria Federal</strong>, na data definida e informada especificamente para cada rifa.</p></section>
@@ -12,3 +12,4 @@ export default function DefaultRaffleRules() {
     <section><h4 className="font-bold">9. Disposição final</h4><p>Ao adquirir um número, o participante declara estar ciente e de acordo com este regulamento e com as condições específicas da respectiva rifa, incluindo <strong>data do sorteio, prêmio e demais informações divulgadas no momento da compra</strong>.</p></section>
   </div>;
 }
+

@@ -73,7 +73,7 @@ body {
   cursor: not-allowed;
 }
 
-/* Sistema visual original — marca neutra */
+/* Sorteios Premium — mobile-first visual system */
 :root { --accent:#6d28d9; --accent2:#8b5cf6; --bg:#f8f7fc; --border:#e9e3f2; }
 body { color:#21162e; -webkit-font-smoothing:antialiased; }
 .raffle-experience .raffle-panel { border-radius:20px; border-color:var(--border); box-shadow:0 5px 24px rgba(50,25,85,.045); }
@@ -88,3 +88,4 @@ body { color:#21162e; -webkit-font-smoothing:antialiased; }
 .checkout-input::placeholder { color:#9ca3af; }
 .selection-bottom-bar { z-index:40; padding-bottom:env(safe-area-inset-bottom); }
 @media (prefers-reduced-motion:reduce) { .raffle-experience *, .raffle-experience *::before,.raffle-experience *::after { animation-duration:.01ms!important; transition-duration:.01ms!important; scroll-behavior:auto!important; } }
+
