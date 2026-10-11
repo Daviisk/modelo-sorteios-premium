@@ -1,0 +1,1 @@
+export type RaffleImage={url:string;caption?:string;illustrative?:boolean};export function getRaffleGallery(gallery?:RaffleImage[],imageUrl?:string|null):RaffleImage[]{return gallery?.length?gallery:imageUrl?[{url:imageUrl}]:[];}
