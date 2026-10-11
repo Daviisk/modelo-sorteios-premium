@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
-import DemoShowcase from "@/components/DemoShowcase";
-export const metadata: Metadata = { title: "Sorteios Premium | Demonstração", description: "Modelo visual de plataforma de sorteios. Demonstração interativa sem cadastro, checkout ou pagamentos.", robots: { index: false, follow: false } };
-export default function Home() { return <DemoShowcase />; }
+import RaffleExperience from "@/components/RaffleExperience";
+export const metadata = { title: "Sorteios Premium | Demonstração", description: "Demonstração neutra da estrutura de sorteios, sem checkout ou pagamentos.", robots: { index: false, follow: false } };
+const numbers = Array.from({length:100},(_,number)=>({number,status:([3,7,12,18,22,29,35,41,47,53,58,63,70,76,82,89,94].includes(number)?"SOLD":"AVAILABLE") as "SOLD"|"AVAILABLE"}));
+const raffle={slug:"demonstracao",title:"Campanha demonstrativa",prize:"Prêmio ilustrativo personalizável",prizeValue:1000,numberPrice:10,totalNumbers:100,drawDate:"2026-11-14T19:00:00.000Z",imageUrl:null,rules:"Modelo demonstrativo: números, datas e valores fictícios. Não há sorteio, venda ou premiação real.",soldCount:17};
+export default function Home(){return <><div className="mx-auto max-w-4xl px-4 pt-4 text-center"><p className="rounded-xl border border-purple-200 bg-purple-50 p-3 text-sm font-semibold text-purple-800">DEMONSTRAÇÃO VISUAL — SEM CHECKOUT, INSCRIÇÃO OU PAGAMENTOS</p></div><RaffleExperience raffle={raffle} initialNumbers={numbers}/></>}
