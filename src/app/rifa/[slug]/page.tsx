@@ -39,7 +39,7 @@ export default async function RafflePage(props: { params: Promise<{ slug: string
   return (
     <main>
     {["ATIVA", "SORTEADA"].includes(raffle.status) && <script type="application/ld+json" dangerouslySetInnerHTML={{__html:jsonLd(structured)}} />}
-    <nav aria-label="Navegação estrutural" className="max-w-3xl mx-auto px-4 pt-4 text-sm"><Link href="/" className="underline">Sorteios São Bento Dobrões</Link><span> / {raffle.title}</span></nav>
+    <nav aria-label="Navegação estrutural" className="max-w-3xl mx-auto px-4 pt-4 text-sm"><Link href="/" className="underline">{SITE_NAME}</Link><span> / {raffle.title}</span></nav>
     <RaffleExperience
       raffle={{
         slug: raffle.slug,
