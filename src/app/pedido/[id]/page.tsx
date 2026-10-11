@@ -1,4 +1,3 @@
-import MetaPurchase from "@/components/MetaPurchase";
 import { canReadOrder } from "@/lib/orderAccess";
 import { notFound, redirect } from "next/navigation";
 import { getOrderById } from "@/lib/services/orderService";
@@ -25,7 +24,6 @@ export default async function OrderPage(props: { params: Promise<{ id: string }>
 
   return (
     <main className="max-w-md mx-auto px-4 py-12">
-      {order.status==="PAID" && order.payment?.status==="APPROVED" && <MetaPurchase orderId={order.id} total={Number(order.total)} quantity={order.numbers.length} slug={order.raffle.slug} />}
       <div className="card p-5">
         <h1 className="font-bold text-lg mb-1">Pedido #{order.id.slice(-6).toUpperCase()}</h1>
         <p className="text-sm text-gray-500 mb-4">{order.raffle.title}</p>
