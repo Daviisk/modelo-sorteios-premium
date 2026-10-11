@@ -4,11 +4,12 @@ import { getRaffleNumberPrice } from "@/lib/rafflePricing";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
-export const metadata = pageMetadata(`${SITE_NAME} — Sorteios de dobrões para capoeira`, SITE_DESCRIPTION, "/");
+export const metadata = pageMetadata(`${SITE_NAME} — Sorteios de prêmios`, SITE_DESCRIPTION, "/");
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
+  if (!process.env.DATABASE_URL) return <main className="mx-auto max-w-3xl px-4 py-16 text-center"><h1 className="text-3xl font-bold">{SITE_NAME}</h1><p className="mt-4 text-gray-500">Configure o banco de dados para administrar sorteios neste modelo.</p></main>;
   const activeRaffles = await prisma.raffle.findMany({
     where: { status: "ATIVA" },
     orderBy: { createdAt: "desc" },
@@ -16,14 +17,14 @@ export default async function Home() {
 
   const structured = { "@context": "https://schema.org", "@graph": [
     { "@type": "WebSite", "@id": `${SITE_URL}/#website`, url: SITE_URL, name: SITE_NAME, inLanguage: "pt-BR", description: SITE_DESCRIPTION },
-    { "@type": "CollectionPage", "@id": `${SITE_URL}/#page`, url: SITE_URL, name: "Sorteios de dobrões para capoeira", isPartOf: { "@id": `${SITE_URL}/#website` }, mainEntity: { "@type": "ItemList", itemListElement: activeRaffles.map((raffle,index)=>({ "@type":"ListItem", position:index+1, name:raffle.title, url: `${SITE_URL}/rifa/${encodeURIComponent(raffle.slug)}` })) } },
+    { "@type": "CollectionPage", "@id": `${SITE_URL}/#page`, url: SITE_URL, name: "Sorteios de prêmios", isPartOf: { "@id": `${SITE_URL}/#website` }, mainEntity: { "@type": "ItemList", itemListElement: activeRaffles.map((raffle,index)=>({ "@type":"ListItem", position:index+1, name:raffle.title, url: `${SITE_URL}/rifa/${encodeURIComponent(raffle.slug)}` })) } },
   ] };
   return (
     <main className="max-w-3xl mx-auto px-4 py-16 text-center">
       <script type="application/ld+json" dangerouslySetInnerHTML={{__html:jsonLd(structured)}} />
       <h1 className="text-3xl font-bold">{SITE_NAME}</h1>
       <p className="text-gray-500 mt-2">
-        Sorteios de dobrões para capoeira com pagamento via PIX e resultado baseado na Loteria Federal. Consulte os prêmios, a data e o regulamento de cada sorteio.
+        Sorteios de prêmios com pagamento via PIX e resultado baseado na Loteria Federal. Consulte os prêmios, a data e o regulamento de cada sorteio.
       </p>
       {activeRaffles.length > 0 ? (
         <div className="grid gap-4 sm:grid-cols-2 mt-6 text-left">
