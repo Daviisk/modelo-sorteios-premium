@@ -1,7 +1,7 @@
 "use client";
 
-import { trackMeta } from "@/lib/metaEvents";
-import MetaPurchase from "@/components/MetaPurchase";
+const trackMeta = (..._args: unknown[]) => {};
+const MetaPurchase = (_props: {orderId:string;total:number;quantity:number;slug:string}) => null;
 import type { RaffleImage } from "@/lib/raffleGallery";
 import RaffleGallery from "@/components/RaffleGallery";
 
