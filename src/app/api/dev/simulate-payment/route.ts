@@ -10,7 +10,7 @@ import { prisma } from "@/lib/prisma";
  * idempotente do webhook real (confirmPayment).
  */
 export async function POST(req: NextRequest) {
-  if (process.env.PAYMENT_PROVIDER !== "mock" || (process.env.NODE_ENV === "production" && process.env.DEMO_PAYMENTS_ENABLED !== "true")) {
+  if (process.env.NODE_ENV === "production" || process.env.PAYMENT_PROVIDER !== "mock") {
     return NextResponse.json({ error: "Disponível apenas com PAYMENT_PROVIDER=mock." }, { status: 403 });
   }
 
